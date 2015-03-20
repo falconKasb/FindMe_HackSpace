@@ -20,8 +20,7 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class MainFragment extends android.support.v4.app.Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -34,15 +33,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private OnFragmentInteractionListener mListener;
 
     private Button button;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static MainFragment newInstance(String param1, String param2) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
@@ -56,6 +47,14 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // Required empty public constructor
     }
 
+    public void click(View v)
+    {
+        switch (v.getId()) {
+            case R.id.buttonMap: {
+                goToMapFragment();
+            }
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +69,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        button = (Button)rootView.findViewById(R.id.button);
+        button = (Button)rootView.findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +82,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
     private void goToMapFragment() {
         android.support.v4.app.FragmentTransaction ft = currentContext.getSupportFragmentManager().beginTransaction();
         MapFragment mapFragment = MapFragment.newInstance("","");
-        ft.replace(R.id.mainFragment,mapFragment);
+        ft.replace(R.id.mainFragment, mapFragment);
         ft.commit();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -112,18 +110,8 @@ public class MainFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         public void onFragmentInteraction(Uri uri);
     }
 
