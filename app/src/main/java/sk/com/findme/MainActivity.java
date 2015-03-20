@@ -1,5 +1,6 @@
 package sk.com.findme;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,11 +20,13 @@ public class MainActivity extends FragmentActivity implements MainFragment.OnFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        fragment = new MainFragment();
+        FragmentManager fm = getFragmentManager();
+        if(fm.findFragmentById(R.id.mainActivity) == null)
+        {        }
     }
 
-    public void clickActivity(View v)
+    public void onButtonPressed(View v)
     {
         fragment.click(v);
     }
