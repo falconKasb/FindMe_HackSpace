@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import java.net.URL;
 
+
 /**
  * Created by sanchirkartiev on 21/03/15.
  */

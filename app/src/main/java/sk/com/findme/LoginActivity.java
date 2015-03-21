@@ -62,7 +62,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_login_sign);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();

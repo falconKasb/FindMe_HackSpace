@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import sk.com.findme.Adapters.ListFriendsAdapter;
 import sk.com.findme.Classes.People;
@@ -42,7 +43,7 @@ public class FriendsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_friends);
         addContactButton = (Button)findViewById(R.id.buttonPlus);
         peoples = new ArrayList<People>();
