@@ -5,10 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.MapFragment;
 
 
 /**
@@ -19,7 +23,7 @@ import android.widget.Button;
  * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends android.support.v4.app.Fragment {
+public class MainFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -30,7 +34,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
 
     private FragmentActivity currentContext;
 
+
     private OnFragmentInteractionListener mListener;
+
+
 
     private Button button;
 
@@ -47,14 +54,7 @@ public class MainFragment extends android.support.v4.app.Fragment {
         // Required empty public constructor
     }
 
-    public void click(View v)
-    {
-        switch (v.getId()) {
-            case R.id.buttonMap: {
-                goToMapFragment();
-            }
-        }
-    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,35 +73,24 @@ public class MainFragment extends android.support.v4.app.Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToMapFragment();
+                if(mListener != null) {
+                    mListener.onFragmentInteraction(v);
+                }
             }
         });
-        return inflater.inflate(R.layout.fragment_main, container, false);
-    }
-
-    private void goToMapFragment() {
-        android.support.v4.app.FragmentTransaction ft = currentContext.getSupportFragmentManager().beginTransaction();
-        MapFragment mapFragment = MapFragment.newInstance("","");
-        ft.replace(R.id.mainFragment, mapFragment);
-        ft.commit();
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
+       /* try {
             currentContext =(FragmentActivity) activity;
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     @Override
@@ -110,9 +99,10 @@ public class MainFragment extends android.support.v4.app.Fragment {
         mListener = null;
     }
 
+
     public interface OnFragmentInteractionListener {
 
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(View view);
     }
 
 }

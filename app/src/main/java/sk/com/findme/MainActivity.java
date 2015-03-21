@@ -1,9 +1,11 @@
 package sk.com.findme;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,23 +15,24 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class MainActivity extends FragmentActivity implements MainFragment.OnFragmentInteractionListener{
+public class MainActivity extends FragmentActivity {
 
-    MainFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fragment = new MainFragment();
-        FragmentManager fm = getFragmentManager();
-        if(fm.findFragmentById(R.id.mainActivity) == null)
-        {        }
+
+        if(savedInstanceState == null)
+        {
+            MainFragment mainFragment = new MainFragment();
+
+            getFragmentManager().beginTransaction()
+                    .add(R.id.mainActivity, mainFragment)
+                    .commit();
+        }
     }
 
-    public void onButtonPressed(View v)
-    {
-        fragment.click(v);
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,8 +52,12 @@ public class MainActivity extends FragmentActivity implements MainFragment.OnFra
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
+
+    private void goToMapFragment() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        MapFragment mapFragment = MapFragment.newInstance("","");
+        ft.replace(R.id.mainFragment, mapFragment);
+        ft.commit();
     }
 }
