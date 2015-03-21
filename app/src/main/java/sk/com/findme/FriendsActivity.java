@@ -3,10 +3,8 @@ package sk.com.findme;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,17 +15,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import sk.com.findme.Adapters.ListFriendsAdapter;
 import sk.com.findme.Classes.People;
@@ -47,9 +41,12 @@ public class FriendsActivity extends ActionBarActivity {
         setContentView(R.layout.activity_friends);
         addContactButton = (Button)findViewById(R.id.buttonPlus);
         peoples = new ArrayList<People>();
+        TextView textView = new TextView(this);
+        textView.setText("Ваш список друзей пуст, добавьте друзей для дальнейшей работы");
 
         customAdapter = new ListFriendsAdapter(this,peoples);
         friendsList = (ListView)findViewById(R.id.listViewFriends);
+        friendsList.setEmptyView(textView);
         friendsList.setAdapter(customAdapter);
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
