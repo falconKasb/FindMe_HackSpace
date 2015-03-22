@@ -31,6 +31,7 @@ public class FriendsActivity extends ActionBarActivity {
     final int PICK_CONTACT = 2;
     ListView friendsList;
     Button addContactButton;
+    Button showOnMapButton;
     ArrayList<People> peoples;
     ListFriendsAdapter customAdapter;
 
@@ -62,6 +63,18 @@ public class FriendsActivity extends ActionBarActivity {
                 callAlert(people.getName());
             }
         });
+        showOnMapButton = (Button)findViewById(R.id.buttonMap);
+        showOnMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                map();
+            }
+        });
+    }
+    public void map()
+    {
+        Intent mapIntent = new Intent(this,MapActivity.class);
+        startActivity(mapIntent);
     }
     private void callAlert(String text)
     {

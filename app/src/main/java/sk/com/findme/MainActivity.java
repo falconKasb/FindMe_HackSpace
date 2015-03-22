@@ -24,11 +24,7 @@ public class MainActivity extends FragmentActivity {
 
         if(savedInstanceState == null)
         {
-            MainFragment mainFragment = new MainFragment();
 
-            getFragmentManager().beginTransaction()
-                    .add(R.id.mainActivity, mainFragment)
-                    .commit();
         }
     }
 
@@ -50,14 +46,5 @@ public class MainActivity extends FragmentActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-
-    private void goToMapFragment() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        MapFragment mapFragment = MapFragment.newInstance("","");
-        ft.replace(R.id.mainFragment, mapFragment);
-        ft.commit();
     }
 }

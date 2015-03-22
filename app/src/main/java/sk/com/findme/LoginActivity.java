@@ -12,6 +12,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -29,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ import java.util.List;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor>,MapFragment.OnFragmentInteractionListener {
+public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -89,6 +91,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        ImageView imageView = (ImageView)findViewById(R.id.logo);
+        imageView.setImageResource(R.drawable.fm);
+
     }
 
     private void goToMap()
@@ -226,10 +231,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
 
-    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {
