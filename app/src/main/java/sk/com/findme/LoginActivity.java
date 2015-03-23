@@ -3,16 +3,12 @@ package sk.com.findme;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.media.Image;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 
@@ -21,20 +17,35 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import sk.com.findme.Adapters.ListFriendsAdapter;
+import sk.com.findme.Classes.FriendsObject;
 
 
 /**
@@ -59,6 +70,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private ArrayList<FriendsObject> friends;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,12 +105,18 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
         ImageView imageView = (ImageView)findViewById(R.id.logo);
         imageView.setImageResource(R.drawable.fm);
+        mEmailView.setTextColor(Color.WHITE);
+        mEmailView.setHintTextColor(Color.GRAY);
+        mPasswordView.setTextColor(Color.WHITE);
+        mPasswordView.setHintTextColor(Color.GRAY);
+        friends = new ArrayList<FriendsObject>();
 
     }
 
     private void goToMap()
     {
         Intent intent = new Intent(this,FriendsActivity.class);
+        intent.putParcelableArrayListExtra("friends", friends);
         startActivity(intent);
     }
 
@@ -198,11 +216,9 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
                         " = ?", new String[]{ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE},
@@ -220,7 +236,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
         addEmailsToAutoComplete(emails);
     }
 
@@ -245,7 +260,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
@@ -261,19 +275,24 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private AsyncHttpClient client = new AsyncHttpClient();
+
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
         }
-
+        public void getLogin(String mEmail, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+            params.add("email",mEmail);
+            client.get(null, "http://192.168.43.48/login", params, responseHandler);
+        }
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
+
+               Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -289,13 +308,46 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
             // TODO: register the new account here.
             return true;
         }
+        private JsonHttpResponseHandler responseHandler() {
+            return new JsonHttpResponseHandler() {
 
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray array) {
+                    try {
+                        parseJsonResponse(array);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.w("LoginActivity", "statusCode" + statusCode + " " + throwable.getMessage());
+                }
+
+            };
+        }
+        public void parseJsonResponse(JSONArray array) throws JSONException {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                FriendsObject friendsObject = new FriendsObject(object);
+                friends.add(friendsObject);
+
+            }
+            goToMap();
+        }
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
             if (success) {
-                goToMap();
+                RequestParams paramsLogin = new RequestParams();
+                getLogin(mEmailView.getText().toString(),paramsLogin,responseHandler());
 
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

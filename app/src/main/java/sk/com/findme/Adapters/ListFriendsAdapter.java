@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import sk.com.findme.Classes.FriendsObject;
 import sk.com.findme.Classes.People;
 import sk.com.findme.R;
 
@@ -22,9 +23,9 @@ public class ListFriendsAdapter extends BaseAdapter {
 
     Context context;
     LayoutInflater inflater;
-    ArrayList<People> friends;
+    ArrayList<FriendsObject> friends;
 
-    public ListFriendsAdapter(Context context, ArrayList<People> friends)
+    public ListFriendsAdapter(Context context, ArrayList<FriendsObject> friends)
     {
         this.friends = friends;
         this.context = context;
@@ -49,12 +50,12 @@ public class ListFriendsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = inflater.inflate(R.layout.item_list_friends, parent, false);
-        People currentPeople = friends.get(position);
+        FriendsObject currentPeople = friends.get(position);
 
         ImageView view = (ImageView)rowView.findViewById(R.id.friendsPhoto);
         TextView firstName = (TextView)rowView.findViewById(R.id.friendsName);
         firstName.setText(currentPeople.getName());
-        view.setImageBitmap(currentPeople.getPicture());
+        //view.setImageBitmap(currentPeople.getPicture());
         return rowView;
     }
 }

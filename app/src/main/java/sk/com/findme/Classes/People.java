@@ -13,21 +13,31 @@ import java.net.URL;
 public class People {
     private Bitmap picture;
     private String name;
+    private String phoneNumber;
 
     public People()
     {
         picture = null;
         name = "";
+        phoneNumber = "";
     }
     public People(String name)
     {
+        this.name = name;
+        this.picture = null;
+        this.phoneNumber = "";
+    }
+    public People(String name, String phoneNumber)
+    {
         this.picture = null;
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
-    public People(Bitmap picture, String name)
+    public People(Bitmap picture, String name, String phoneNumber)
     {
         this.picture = picture;
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
     public void setPicture(Bitmap picture)
     {
@@ -37,10 +47,12 @@ public class People {
     {
         this.name = firstName;
     }
+    public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
     public Bitmap getPicture()
     {
         return picture;
     }
     public String getName() { return name; }
+    public String getPhoneNumber() {return phoneNumber;}
 
 }
