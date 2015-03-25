@@ -191,7 +191,7 @@ public class FriendsActivity extends ActionBarActivity {
         startActivity(mapIntent);
     }
     public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.get(null, "http://192.168.43.48/getUsersList", params, responseHandler);
+        client.get(null, host+"/getUsersList", params, responseHandler);
     }
     /*public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
         params.add("","");
