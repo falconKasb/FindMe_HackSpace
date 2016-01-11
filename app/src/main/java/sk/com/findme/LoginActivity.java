@@ -57,6 +57,7 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
+    private int a;
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
@@ -291,7 +292,6 @@ public class LoginActivity extends ActionBarActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
 
             try {
-
                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
